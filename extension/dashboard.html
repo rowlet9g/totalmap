@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Totalmap · 지도 목록 연결</title><link rel="stylesheet" href="style.css"></head>
+<body><main>
+<header><div class="brand"><span class="logo">T</span> Totalmap</div><span id="mode" class="tag">연결 준비</span></header>
+<section class="hero"><p class="eyebrow">세 지도, 같은 분류</p><h1>저장한 장소를<br>한곳에서 연결하세요.</h1><p>국내 장소는 네이버·카카오·Google에 함께.<br>해외 장소와 제외한 목록은 그대로 유지합니다.</p></section>
+<div class="notice"><strong>아직 자동 동기화가 실행되지 않습니다.</strong><span>현재 버전은 읽기 진단과 동기화 계획 검토 단계입니다. 실제 계정의 추가·삭제·이동·메모 변경 기능은 연결 검증 후 활성화할 예정입니다.</span></div>
+<section><div class="section-head"><h2>연결할 목록</h2><span>첨부 화면 기준 · 중복 및 해외 포함</span></div><div id="providers" class="cards"></div>
+<div class="table-wrap"><table><thead><tr><th>분류</th><th>네이버지도</th><th>카카오맵</th><th>Google 지도</th></tr></thead><tbody id="mapping"></tbody></table></div>
+<p class="muted">Google의 Saved places · 여행 계획 제외 / 메모 복사 안 함 / 기존 공유 목록 사용 허용</p></section>
+<section class="split"><article class="panel"><p class="eyebrow">01 · 연결 확인</p><h2>Whale에서 목록 읽기</h2><ol><li>지도 탭에서 동기화할 목록 하나를 엽니다.</li><li>Totalmap 확장 버튼에서 분류를 선택합니다.</li><li>‘현재 지도 읽기’를 누릅니다.</li><li>이 화면에서 결과를 확인합니다.</li></ol><p>수집 결과는 이 브라우저에만 저장됩니다. 처음에는 장소 링크가 안 잡히거나 일부만 잡힐 수 있습니다. 이 결과로 서비스별 수집기를 검증합니다.</p><div class="actions"><button id="refresh">결과 새로고침</button><button id="export">수집 결과 내보내기</button></div></article>
+<article class="panel"><p class="eyebrow">02 · 동기화 원칙</p><h2>처음에는 합치고,<br>다음부터는 변경만.</h2><ul><li>국내 장소와 네 분류의 소속 관계를 연결합니다.</li><li>삭제 판단에는 완전한 조회와 이전 기준 상태가 필요합니다.</li><li>분류 이동은 새 분류에 추가한 뒤 기존 분류에서 제거합니다.</li><li>충돌·미확인 장소는 확인 대상으로 남깁니다.</li></ul></article></section>
+<section><div class="section-head"><h2>읽기 진단 기록</h2><span id="capture-count"></span></div><div id="captures"></div></section>
+<details class="panel"><summary>개발 검증 · 전체 스냅샷으로 계획 미리보기</summary><p>진단 기록은 전체 스냅샷이 아니므로 삭제 판단에 사용하지 않습니다. 검증용 JSON 형식은 프로젝트 문서를 참조하세요. 가져온 데이터도 지도 계정에는 반영되지 않습니다.</p><label class="file-label">스냅샷 JSON 가져오기 <input id="import" type="file" accept=".json,application/json"></label><button id="plan">변경 계획 계산</button><p id="import-status" role="status"></p><div id="plan-result"></div></details>
+<p id="status" role="status" aria-live="polite"></p><footer>Totalmap · 개인용 로컬 도구 · 연결 검증 중</footer>
+</main><script type="module" src="dashboard.js"></script></body></html>

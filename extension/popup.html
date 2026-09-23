@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>Totalmap</title><link rel="stylesheet" href="style.css"></head>
+<body class="popup"><div class="brand"><span class="logo">T</span> Totalmap <span class="tag">연결 준비</span></div>
+<h1>지금 열린 지도 확인</h1><p>동기화할 목록을 연 다음 읽어 주세요. 장소 링크와 화면 구조를 로컬에 기록합니다. 개발 도구가 실행 중이면 이 PC의 프로젝트 폴더에도 전달합니다. 저장·메모는 변경하지 않습니다.</p>
+<label for="category">이 화면의 분류</label><select id="category"><option value="">목록 선택 화면 / 미지정</option><option value="landmark">내 장소 · 기본 그룹 · landmark</option><option value="cuisine">cuisine</option><option value="cafeteria">cafeteria</option><option value="bar">bar</option></select>
+<button id="connect-naver">네이버 저장 패널 연결 (최초 1회)</button>
+<button id="capture" class="primary">현재 지도 읽기</button><button id="dashboard">관리 화면 열기</button>
+<p id="status" role="status" aria-live="polite"></p><script type="module" src="popup.js"></script></body></html>

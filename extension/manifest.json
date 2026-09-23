@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Totalmap · 지도 목록 연결",
+  "version": "0.1.0",
+  "description": "지도 페이지의 장소 링크를 로컬로 수집하고 동기화 계획을 검토합니다. 이 버전은 지도 저장을 변경하지 않습니다.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "optional_host_permissions": ["https://pages.map.naver.com/*", "https://pcmap.place.naver.com/*"],
+  "action": { "default_title": "Totalmap", "default_popup": "popup.html" },
+  "options_page": "dashboard.html",
+  "content_security_policy": { "extension_pages": "script-src 'self'; object-src 'none'" }
+}
