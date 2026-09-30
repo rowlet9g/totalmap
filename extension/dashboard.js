@@ -25,6 +25,7 @@ async function render() {
     const row = el('article', undefined, 'capture');
     row.append(el('h3', `${sample.placeName || '이름 미확인'} · 네이버 장소 ID ${sample.placeId}`), el('p', `탭 제목(참고): ${sample.pageTitle || '없음'}`),
       el('p', sample.url), el('p', sample.warning), el('p', formatDate(sample.capturedAt)));
+    if (sample.nameEvidence) row.append(el('p', `이름 출처: ${sample.nameEvidence === 'tab-title' ? '탭 제목 · 장소 본문 대조 미검증' : '사용자 직접 입력'}`));
     if (sample.folderContext) row.append(el('p', `선택 화면의 폴더 ID: ${sample.folderContext.listId} · 목록 전체 소속 조회는 미검증`));
     $('#detail-reads').append(row);
   }

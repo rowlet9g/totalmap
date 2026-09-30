@@ -47,3 +47,15 @@ test('serialized frame probe reads only allowed origin/path, not queries or page
   assert.equal(vm.runInNewContext(`(${inspectNaverDetailUrl.toString()})()`, {
     location: new URL('https://unrelated.example/place/123') }), null);
 });
+
+test('observed detail tab title provides a labeled name; list titles do not and user input takes priority', () => {
+  const sample = buildNaverDetailSample({ pageUrl: suppliedUrl, pageTitle: '스팀하우스 인덕원점 - 네이버지도' });
+  assert.equal(sample.placeName, '스팀하우스 인덕원점');
+  assert.equal(sample.nameEvidence, 'tab-title');
+  assert.equal(sample.membershipVerified, false);
+  assert.equal(buildNaverDetailSample({ pageUrl: suppliedUrl, pageTitle: 'cuisine - 네이버지도' }).placeName, '');
+  assert.equal(buildNaverDetailSample({ pageUrl: suppliedUrl, pageTitle: 'unknown format' }).placeName, '');
+  const entered = buildNaverDetailSample({ pageUrl: suppliedUrl, pageTitle: '다른 이름 - 네이버지도', placeName: '직접 확인' });
+  assert.equal(entered.placeName, '직접 확인');
+  assert.equal(entered.nameEvidence, 'user-entered');
+});
