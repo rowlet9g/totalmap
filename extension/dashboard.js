@@ -19,6 +19,15 @@ for (const category of CATEGORIES) {
 }
 async function render() {
   const state = await load(); $('#captures').replaceChildren();
+  $('#detail-reads').replaceChildren();
+  if (!state.detailReads?.length) $('#detail-reads').append(el('p', '상세 URL 읽기 기록 없음'));
+  for (const sample of [...(state.detailReads ?? [])].reverse()) {
+    const row = el('article', undefined, 'capture');
+    row.append(el('h3', `${sample.placeName || '이름 미확인'} · 네이버 장소 ID ${sample.placeId}`), el('p', `탭 제목(참고): ${sample.pageTitle || '없음'}`),
+      el('p', sample.url), el('p', sample.warning), el('p', formatDate(sample.capturedAt)));
+    if (sample.folderContext) row.append(el('p', `선택 화면의 폴더 ID: ${sample.folderContext.listId} · 목록 전체 소속 조회는 미검증`));
+    $('#detail-reads').append(row);
+  }
   $('#capture-count').textContent = `${state.captures.length}회`;
   if (!state.captures.length) $('#captures').append(el('div', '아직 읽기 기록이 없습니다. Whale의 지도 목록에서 Totalmap 확장을 실행해 주세요.', 'empty'));
   for (const capture of [...state.captures].reverse()) {
@@ -33,7 +42,7 @@ async function render() {
 }
 $('#refresh').addEventListener('click', () => render().catch(e => report(e.message)));
 $('#export').addEventListener('click', async () => {
-  try { const state = await load(); download({ version: 1, kind: 'totalmap-diagnostics', captures: state.captures }, `totalmap-diagnostics-${Date.now()}.json`); }
+  try { const state = await load(); download({ version: 1, kind: 'totalmap-diagnostics', captures: state.captures, detailReads: state.detailReads ?? [] }, `totalmap-diagnostics-${Date.now()}.json`); }
   catch (e) { report(e.message); }
 });
 $('#import').addEventListener('change', async event => {

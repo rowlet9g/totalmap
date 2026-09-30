@@ -85,3 +85,16 @@ test('data inspection does not access dataset or read any unverified attribute v
   };
   assert.doesNotThrow(() => execute(body, 'pages.map.naver.com'));
 });
+
+test('diagnostics excludes image URLs and never inspects React internals', () => {
+  const { body, card } = savedCard();
+  Object.defineProperty(card, '__reactProps$xyz', { get() { throw Error('React internals must not be read'); } });
+  card.querySelectorAll = selector => {
+    if (selector === 'img[src]') throw Error('image URLs must not be collected');
+    return [];
+  };
+  const result = execute(body, 'pages.map.naver.com');
+  const row = result.structure.find(r => r.tag === 'li');
+  assert.equal(row.thumbSrcs, undefined);
+  assert.equal(row.reactKeys, undefined);
+});

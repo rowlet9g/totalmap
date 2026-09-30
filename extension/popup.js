@@ -2,11 +2,31 @@ import { inspectPage } from './capture.js';
 import { parsePlaceLink, providerForPage } from './core/links.js';
 import { load, save, download } from './storage.js';
 import { LABELS } from './core/config.js';
+import { buildNaverDetailSample, inspectNaverDetailUrl } from './core/detail.js';
 const status = document.querySelector('#status');
+
+document.querySelector('#read-detail').addEventListener('click', async event => {
+  event.target.disabled = true;
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (providerForPage(tab?.url) !== 'naver') throw Error('네이버지도 탭에서 장소 카드 한 개를 연 뒤 실행하세요.');
+    // The top URL can already identify the detail. Do not require extra frame access then.
+    const topPlace = parsePlaceLink(tab.url);
+    const results = topPlace?.provider === 'naver' ? [] : await chrome.scripting.executeScript({
+      target: { tabId: tab.id, allFrames: true }, func: inspectNaverDetailUrl });
+    const sample = buildNaverDetailSample({ pageUrl: tab.url, pageTitle: tab.title,
+      placeName: document.querySelector('#detail-name').value,
+      frameUrls: results.map(r => r.result).filter(Boolean), category: document.querySelector('#category').value || null });
+    sample.id = crypto.randomUUID(); sample.capturedAt = new Date().toISOString();
+    const state = await load(); state.detailReads ??= []; state.detailReads.push(sample); await save(state);
+    status.textContent = `네이버 장소 ID ${sample.placeId}를 이 확장에 기록했습니다. 관리 화면에서 확인할 수 있습니다. 목록 소속·전체 수집·동기화는 미검증입니다.`;
+  } catch (error) { status.textContent = `상세 URL 읽기 실패: ${error.message}`; }
+  finally { event.target.disabled = false; }
+});
 document.querySelector('#connect-naver').addEventListener('click', async () => {
   try {
     const granted = await chrome.permissions.request({ origins: ['https://pages.map.naver.com/*', 'https://pcmap.place.naver.com/*'] });
-    status.textContent = granted ? '네이버 저장 패널 연결 완료. 이제 현재 지도 읽기를 눌러 주세요.'
+    status.textContent = granted ? '네이버 저장 패널 접근 허용 완료. 이제 화면 진단 실행을 눌러 주세요. 장소 저장·동기화는 실행되지 않습니다.'
       : '저장 패널 접근이 허용되지 않았습니다. 바깥 지도 화면만 읽을 수 있습니다.';
   } catch (error) { status.textContent = `연결 실패: ${error.message}`; }
 });

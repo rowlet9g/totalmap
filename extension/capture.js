@@ -5,7 +5,8 @@ export function inspectPage() {
   if (!allowed.has(location.hostname)) return { skipped: true };
   const listNames = new Set(['내 장소', '기본 그룹', 'landmark', 'cuisine', 'cafeteria', 'bar']);
   const anchors = Array.from(document.querySelectorAll('a[href]'));
-  // Do not read body text, cookies, localStorage, input fields, notes or network responses.
+  // Read visible links only here; structural text below may include user-authored text.
+  // Never read cookies, localStorage, input fields or network responses.
   const links = anchors.slice(0, 5000).filter(el => el.getClientRects().length)
     .map(el => ({ href: el.href, label: (el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 180) }));
   const listSignals = Array.from(document.querySelectorAll('h1,h2,h3,h4,[role=heading],button,[role=tab],a'))

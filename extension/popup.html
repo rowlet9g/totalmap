@@ -1,8 +1,11 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><title>Totalmap</title><link rel="stylesheet" href="style.css"></head>
-<body class="popup"><div class="brand"><span class="logo">T</span> Totalmap <span class="tag">연결 준비</span></div>
-<h1>지금 열린 지도 확인</h1><p>동기화할 목록을 연 다음 읽어 주세요. 장소 링크와 화면 구조를 로컬에 기록합니다. 개발 도구가 실행 중이면 이 PC의 프로젝트 폴더에도 전달합니다. 저장·메모는 변경하지 않습니다.</p>
+<body class="popup"><div class="brand"><span class="logo">T</span> Totalmap <span class="tag">진단용 · 동기화 미구현</span></div>
+<h1>현재 지도 화면 진단</h1><p>이 버전은 다른 지도에 장소를 저장하거나 동기화할 수 없습니다. 목록을 열고 진단을 실행하면 개발에 필요한 장소 링크와 화면 구조만 이 확장에 기록합니다. 개발 도구에 전달할 수 없으면 진단 JSON 파일을 내려받습니다. JSON은 저장·동기화 완료 결과가 아닙니다.</p>
 <label for="category">이 화면의 분류</label><select id="category"><option value="">목록 선택 화면 / 미지정</option><option value="landmark">내 장소 · 기본 그룹 · landmark</option><option value="cuisine">cuisine</option><option value="cafeteria">cafeteria</option><option value="bar">bar</option></select>
 <button id="connect-naver">네이버 저장 패널 연결 (최초 1회)</button>
-<button id="capture" class="primary">현재 지도 읽기</button><button id="dashboard">관리 화면 열기</button>
+<p>네이버 장소 카드 한 개를 연 뒤 상세 URL의 장소 ID를 읽을 수 있습니다. 이름·주소·목록 소속 확인은 아직 별도 검증이 필요합니다.</p>
+<label for="detail-name">장소 이름 (선택 · 화면에서 확인한 이름)</label><input id="detail-name" type="text" maxlength="180" placeholder="예: 스팀하우스 인덕원점">
+<button id="read-detail">네이버 상세 URL의 ID 읽기</button>
+<button id="capture" class="primary">화면 진단 실행 (저장·동기화 아님)</button><button id="dashboard">관리 화면 열기</button>
 <p id="status" role="status" aria-live="polite"></p><script type="module" src="popup.js"></script></body></html>

@@ -1,5 +1,5 @@
 const KEY = 'totalmap-v1';
-const empty = () => ({ version: 1, captures: [], input: null });
+const empty = () => ({ version: 1, captures: [], detailReads: [], input: null });
 export const isExtension = Boolean(globalThis.chrome?.runtime?.id);
 export async function load() {
   if (isExtension) return (await chrome.storage.local.get(KEY))[KEY] ?? empty();
