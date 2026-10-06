@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 test('detail popup persists user-observed URL evidence; ambiguous frames fail without saving', async () => {
   const previousDocument = globalThis.document, previousChrome = globalThis.chrome;
   const controls = new Map();
-  for (const selector of ['#status', '#read-detail', '#detail-name', '#category', '#connect-naver', '#dashboard', '#capture'])
+  for (const selector of ['#status', '#read-detail', '#read-place', '#detail-name', '#category', '#connect-naver', '#dashboard', '#capture'])
     controls.set(selector, { value: '', textContent: '', addEventListener(type, callback) { this[type] = callback; } });
   controls.get('#detail-name').value = '스팀하우스 인덕원점';
   controls.get('#category').value = 'cuisine';

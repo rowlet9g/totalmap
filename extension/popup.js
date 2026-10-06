@@ -2,8 +2,32 @@ import { inspectPage } from './capture.js';
 import { parsePlaceLink, providerForPage } from './core/links.js';
 import { load, save, download } from './storage.js';
 import { LABELS } from './core/config.js';
-import { buildNaverDetailSample, inspectNaverDetailUrl } from './core/detail.js';
+import { buildNaverDetailSample, inspectNaverDetailUrl, attachNaverDetailFields, inspectNaverDetailFields } from './core/detail.js';
 const status = document.querySelector('#status');
+
+document.querySelector('#read-place').addEventListener('click', async event => {
+  event.target.disabled = true;
+  try {
+    const [before] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (providerForPage(before?.url) !== 'naver') throw Error('네이버 장소 상세 홈 화면에서 실행하세요.');
+    status.textContent = '선택한 장소의 이름·주소를 읽고 있습니다…';
+    const results = await chrome.scripting.executeScript({
+      target: { tabId: before.id, allFrames: true }, func: inspectNaverDetailFields });
+    const [after] = await chrome.tabs.query({ active: true, currentWindow: true });
+    // A popup-triggered read must stay on the same tab, route and title until it finishes.
+    const route = url => { const value = new URL(url); return value.origin + value.pathname; };
+    if (after?.id !== before.id || route(after.url) !== route(before.url) || after.title !== before.title)
+      throw Error('읽는 동안 탭이나 장소가 바뀌었습니다. 화면 전환 완료 후 다시 실행하세요.');
+    const frames = results.map(r => r.result).filter(Boolean);
+    const sample = attachNaverDetailFields(buildNaverDetailSample({ pageUrl: after.url, pageTitle: after.title,
+      placeName: document.querySelector('#detail-name').value, category: document.querySelector('#category').value || null,
+      frameUrls: frames.map(f => f.sourceUrl) }), frames);
+    sample.id = crypto.randomUUID(); sample.capturedAt = new Date().toISOString();
+    const state = await load(); state.detailReads ??= []; state.detailReads.push(sample); await save(state);
+    status.textContent = `${sample.placeName} · ID ${sample.placeId} · 주소를 이 확장에 기록했습니다. 관리 화면에서 확인할 수 있습니다. 전체 수집·동기화는 미검증입니다.`;
+  } catch (error) { status.textContent = `이름·주소 읽기 실패: ${error.message}`; }
+  finally { event.target.disabled = false; }
+});
 
 document.querySelector('#read-detail').addEventListener('click', async event => {
   event.target.disabled = true;

@@ -1,5 +1,7 @@
 # 2026-09-30 정상화 기록
 
+후속 작업: 2026-10-06에 상세 홈의 이름·주소 자동 읽기를 구현하고 사용자 실사용으로 확인했다. 최신 상태는 [STEP1_NAVER_FIELDS.md](STEP1_NAVER_FIELDS.md)를 참조한다. 아래 기록은 9월 30일 정상화 당시의 범위다.
+
 ## 복구와 정리
 
 - 변경 전 tracked 파일 차이를 `data/recovery/2026-09-30/before-normalization.patch`에 보관했다. 당시 미추적 IMPLEMENTATION_AUDIT.md와 capture.js 및 테스트 파일도 별도로 복사했다. data는 Git 제외 대상이다.
